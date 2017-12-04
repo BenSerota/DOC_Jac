@@ -8,7 +8,7 @@
 % % set path first
 clear 
 clc
-close all
+% close all
 
 av_param_values % sets avalanche parameters
 fold = what;
@@ -29,24 +29,11 @@ for i = 1:subjects
     clear BIG4
 end
 
+%%
+
 loggingplots(SUBJECTS)
 
-calc_Bentropy(SUBJECTS)
+calc_Entropy(SUBJECTS)
 
 
-%% functions
-
-
-function [CAT] = matcat (STRCT)
-
-% concatenating all conditions and trials
-CAT = cat(3,STRCT.data.LSGS,STRCT.data.LSGD,STRCT.data.LDGS,STRCT.data.LDGD);
-
-%reshaping into 1 matrix (electrodesXtime)
-rows = size(STRCT.data.LSGS,1); % just eliciting # of electrodes
-CAT = reshape(CAT,rows,[]);
-
-% deleting 257th row (ground) ?
-% CAT(end,:) = [];
-
-end
+% % functions
