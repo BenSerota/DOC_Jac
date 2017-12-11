@@ -8,8 +8,6 @@ function [dev_prcnt_trials , to_load] = random_check (DATA_FLAG,PLOT_FLAG)
     % the parameters in the scripts 'random_check'
     % FIRST GO TO YOUR CHOSEN DATA FOLDER 
 
-    global testingcounter
-    
 % loading good channels
 load good_channels
 xlm = [1 10000]+10000;
@@ -49,7 +47,7 @@ chosen_s = randi(subjects,1,1);
 to_load = info.mat(chosen_s);           % in a cell cuz 'load' works on cells
 loaded = cellfun(@load,to_load);
 DATA = loaded.data.(sprintf(subdata))(1:256,:,:);
-testingcounter = testingcounter +1
+testingcounter = testingcounter +;;
 clear loaded
 
 % concatenate trials in every channel

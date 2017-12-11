@@ -14,7 +14,7 @@ for i = 1:4
 end
 
 %% deviation differences between conditions (LSGS/LSGD etc...)
-% bar3()
+bar3()
 
 %% Data Analysis
 
