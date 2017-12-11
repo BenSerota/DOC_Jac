@@ -7,9 +7,7 @@ function [dev_prcnt_trials , to_load] = random_check (DATA_FLAG,PLOT_FLAG)
     % To choose the number of trials/channels/subjects to plot edit
     % the parameters in the scripts 'random_check'
     % FIRST GO TO YOUR CHOSEN DATA FOLDER 
-
-    global testingcounter
-    
+ 
 % loading good channels
 load good_channels
 xlm = [1 10000]+10000;
@@ -17,7 +15,7 @@ thresh = 3;                             % sets STD thresh of "deviant"
 
 % choosing condition in data
 data_flag = DATA_FLAG;
-plot_flag = PLOT_FLAG;
+% plot_flag = PLOT_FLAG;
 switch data_flag
     case 1
         subdata = 'LSGS';
@@ -49,17 +47,19 @@ chosen_s = randi(subjects,1,1);
 to_load = info.mat(chosen_s);           % in a cell cuz 'load' works on cells
 loaded = cellfun(@load,to_load);
 DATA = loaded.data.(sprintf(subdata))(1:256,:,:);
-testingcounter = testingcounter +1
 clear loaded
 
 % concatenate trials in every channel
 long_elec = reshape(DATA,size(DATA,1),[]);
 
-% choose some channels to plot
-% chosen_c = randi(elecs,1,c);                                  % takes into account ALL electrodes
-% chosen_c = good_channels(randperm(length(good_channels),c));  % takes into account only scalp electrodes
-chosen_c = setdiff(1:256,good_channels);                        % takes into account only non-scalp electrodes
-chosen_c = chosen_c(randperm(length(chosen_c),c)); 
+%% choose some channels to plot
+% option 1: takes into account ALL electrodes:
+    % chosen_c = randi(elecs,1,c);
+% option 2: takes into account only scalp electrodes:
+    chosen_c = good_channels(randperm(length(good_channels),c));
+% option 3: takes into account only non-scalp electrodes:
+    % chosen_c = setdiff(1:256,good_channels);
+    % chosen_c = chosen_c(randperm(length(chosen_c),c));
 
 %% plotting
 if PLOT_FLAG == 1
@@ -137,12 +137,9 @@ if PLOT_FLAG == 1
     end
     mtit('z-scores of random channels, z by trial');
    
-    fprintf('%% of data over 3 STD : %G%%', dev_prcnt_trials)
+    fprintf('%% of data over %g STD : %G%%', thresh, dev_prcnt_trials)
     % for a normal dist, +-3STD covers 98% of data, ideally dev_prcnt=2:
     fprintf('\n Averaging across electrodes, data is %g times the noise of a normal distribution', dev_prcnt_trials/2)
     tilefigs
 end
-
-%% deviation differences between conditions
-
 
