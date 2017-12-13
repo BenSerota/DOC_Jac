@@ -44,6 +44,8 @@ data_kind = {['data.' subdata]};
 chosen_s = randi(subjects,1,1);
 
 % load subject
+loaded = load(info.mat{chosen_s});
+
 to_load = info.mat(chosen_s);           % in a cell cuz 'load' works on cells
 loaded = cellfun(@load,to_load);
 DATA = loaded.data.(sprintf(subdata))(1:256,:,:);
@@ -52,14 +54,14 @@ clear loaded
 % concatenate trials in every channel
 long_elec = reshape(DATA,size(DATA,1),[]);
 
-% choose some channels to plot
-    % option 1: takes into account ALL electrodes:
-% chosen_c = randi(elecs,1,c);                 
-    % option 2: takes into account only scalp electrodes:
-% chosen_c = good_channels(randperm(length(good_channels),c));  
-    % option 3: takes into account only non-scalp electrodes:
-% chosen_c = setdiff(1:256,good_channels);                        
-% chosen_c = chosen_c(randperm(length(chosen_c),c)); 
+%% choose some channels to plot
+% option 1: takes into account ALL electrodes:
+    % chosen_c = randi(elecs,1,c);
+% option 2: takes into account only scalp electrodes:
+    chosen_c = good_channels(randperm(length(good_channels),c));
+% option 3: takes into account only non-scalp electrodes:
+    % chosen_c = setdiff(1:256,good_channels);
+    % chosen_c = chosen_c(randperm(length(chosen_c),c));
 
 %% plotting
 if PLOT_FLAG == 1
@@ -137,12 +139,9 @@ if PLOT_FLAG == 1
     end
     mtit('z-scores of random channels, z by trial');
    
-    fprintf('%% of data over 3 STD : %G%%', dev_prcnt_trials)
+    fprintf('%% of data over %g STD : %G%%', thresh, dev_prcnt_trials)
     % for a normal dist, +-3STD covers 98% of data, ideally dev_prcnt=2:
     fprintf('\n Averaging across electrodes, data is %g times the noise of a normal distribution', dev_prcnt_trials/2)
     tilefigs
 end
-
-%% deviation differences between conditions
-
 

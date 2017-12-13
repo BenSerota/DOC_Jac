@@ -44,8 +44,7 @@ data_kind = {['data.' subdata]};
 chosen_s = randi(subjects,1,1);
 
 % load subject
-to_load = info.mat(chosen_s);           % in a cell cuz 'load' works on cells
-loaded = cellfun(@load,to_load);
+loaded = load(info.mat{chosen_s});
 DATA = loaded.data.(sprintf(subdata))(1:256,:,:);
 clear loaded
 

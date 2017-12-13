@@ -55,8 +55,8 @@ end
 function msk = msk2rstr(msk,ts,pos)
 
 smpls = size(msk,1);
-msk = col([msk;zeros(1,size(ts,2))]);
-ts = col([ts;zeros(1,size(ts,2))]);
+msk = [msk;zeros(1,size(ts,2))]; %col([msk;zeros(1,size(ts,2))]);
+ts = [ts;zeros(1,size(ts,2))]; %col([ts;zeros(1,size(ts,2))]);
 [s,e] = enpoints2find(msk);
 if isempty(s)
     return
