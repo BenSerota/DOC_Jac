@@ -52,9 +52,6 @@ for i = 1:length(conds)                                                    % ove
                 else
                     hb_elec(j).(sprintf(subconds{ii})) = 0;
                 end
-                if j == 255
-                    'g'
-                end
             end
         end
         hb_gen_elec = cell2mat(reshape(struct2cell(hb_elec),length(subconds),[])');
@@ -70,6 +67,6 @@ for i = 1:length(conds)                                                    % ove
     fprintf('\n%g',hb_in_elecs.(sprintf('%s',conds{i})));
     fprintf('\n This HB code matched %g electrodes in "good_channels", which are the following: ', length(matched_not_good));
     fprintf('\n %g',matched_not_good);
-    fprintf('\n FOR SUMMARY, see structure "hb_in_elecs" \n');
 end
 
+fprintf('\n FOR SUMMARY, see structure "hb_in_elecs" \n');

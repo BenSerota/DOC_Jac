@@ -13,11 +13,10 @@ subjects = length(info.mat);
 [ALLEEG EEG CURRENTSET ALLCOM] = eeglab;
 pop_editoptions( 'option_storedisk', 1);                                    % keep only 1 data set in memory.
 
-for i = 1:3 %length(conds)                                                     % over conditions
+for i = 1 %:length(conds)                                                     % over conditions
     cd(data_paths{i})
-    %     chosen_s = randi(subjects,1,1);                                   % choose a subject.
-    for ii = 1:length(info.mat)
-        chosen_s = ii;                                                      % this was redundant but i wanted to be consistent with the other codes
+    for ii = 1:length(info.mat)                                             % over subjects 
+        chosen_s = ii;                                                      % chooses a sbj. this was redundant but i wanted to be consistent with the other codes
         loaded = load(info.mat{chosen_s});
         name = sprintf('subj_%s',info.mat{chosen_s});
         name = name(1:end-4);                                               % drops the '.mat' ending
@@ -28,7 +27,7 @@ for i = 1:3 %length(conds)                                                     %
             EEG = eeg_checkset( EEG );
             EEG = pop_reref( EEG, 257);
             [ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, 1,'overwrite','on','gui','off');
-            EEG = pop_eegfiltnew(EEG, 12,25,414,1,[],0);
+            EEG = pop_eegfiltnew(EEG, 12,25,414,1,[],0); %%% NOPE. TREAT DIFFERENTLY
             [ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, 1,'overwrite','on','gui','off');
 %             eeglab redraw
             % saving
