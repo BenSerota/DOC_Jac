@@ -1,6 +1,9 @@
 %cleaning doc jac data
 clear
 
+mac_paths = {'/Users/admin/Desktop/DACOBO_h/VS';'/Users/admin/Desktop/DACOBO_h/EMCS';...
+    '/Users/admin/Desktop/DACOBO_h/MCS';'/Users/admin/Desktop/DACOBO_h/CTRL'};
+
 data_paths = {'E:\DOC\Data from Jaco\VS';'E:\DOC\Data from Jaco\MCS';...
     'E:\DOC\Data from Jaco\EMCS';'E:\DOC\Data from Jaco\CTRL'};
 out_paths = {'E:\DOC\Data_Jaco_filt\VS';'E:\DOC\Data_Jaco_filt\MCS';...
@@ -13,8 +16,11 @@ subjects = length(info.mat);
 [ALLEEG EEG CURRENTSET ALLCOM] = eeglab;
 pop_editoptions( 'option_storedisk', 1);                                    % keep only 1 data set in memory.
 
-for i = 1 %:length(conds)                                                     % over conditions
-    cd(data_paths{i})
+% for i = 1 %:length(conds)                                                     % over conditions
+i = 1;
+
+cd(mac_paths{i});
+% cd(data_paths{i})
     for ii = 1:length(info.mat)                                             % over subjects 
         chosen_s = ii;                                                      % chooses a sbj. this was redundant but i wanted to be consistent with the other codes
         loaded = load(info.mat{chosen_s});
@@ -27,15 +33,15 @@ for i = 1 %:length(conds)                                                     % 
             EEG = eeg_checkset( EEG );
             EEG = pop_reref( EEG, 257);
             [ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, 1,'overwrite','on','gui','off');
-            EEG = pop_eegfiltnew(EEG, 12,25,414,1,[],0); %%% NOPE. TREAT DIFFERENTLY
+            EEG = pop_eegfiltnew(EEG, 1.5,25,414,1,[],0); %%% NOPE. TREAT DIFFERENTLY
             [ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, 1,'overwrite','on','gui','off');
-%             eeglab redraw
+            eeglab redraw
             % saving
-            var = ALLEEG(end).data;
-            cd(out_paths{i})
-            save(sprintf('%s_filt',name), 'var')
+%             var = ALLEEG(end).data;
+%             cd(out_paths{i})
+%             save(sprintf('%s_filt',name), 'var')
         end
     end
     clear loaded
-end
+% end
 
