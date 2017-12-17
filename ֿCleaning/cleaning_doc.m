@@ -1,7 +1,7 @@
 %cleaning doc jac data
 clear
 
-mac_paths = {'/Users/admin/Desktop/DACOBO_h/VS';'/Users/admin/Desktop/DACOBO_h/EMCS';...
+mac_data_paths = {'/Users/admin/Desktop/DACOBO_h/VS';'/Users/admin/Desktop/DACOBO_h/EMCS';...
     '/Users/admin/Desktop/DACOBO_h/MCS';'/Users/admin/Desktop/DACOBO_h/CTRL'};
 
 data_paths = {'E:\DOC\Data from Jaco\VS';'E:\DOC\Data from Jaco\MCS';...
@@ -19,7 +19,7 @@ pop_editoptions( 'option_storedisk', 1);                                    % ke
 % for i = 1 %:length(conds)                                                     % over conditions
 i = 1;
 
-cd(mac_paths{i});
+cd(mac_data_paths{i});
 % cd(data_paths{i})
     for ii = 1:length(info.mat)                                             % over subjects 
         chosen_s = ii;                                                      % chooses a sbj. this was redundant but i wanted to be consistent with the other codes

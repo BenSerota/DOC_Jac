@@ -1,12 +1,12 @@
 
-function [dev_prcnt] = random_check (DATA_FLAG,PLOT_FLAG)
+function [dev_prcnt] = random_check_bytrial (DATA_FLAG,PLOT_FLAG)
 % This function plots the activity in a handful of random electrodes, in
 % one random subject.
-    % The function returns both aw-data and z-score plots of the electrode. 
-    % All trials are concatenated to give one 'long' time series. 
-    % To choose the number of trials/channels/subjects to plot edit
-    % the parameters in the scripts 'random_check'
-    % FIRST GO TO YOUR CHOSEN DATA FOLDER 
+% The function returns both aw-data and z-score plots of the electrode.
+% All trials are concatenated to give one 'long' time series.
+% To choose the number of trials/channels/subjects to plot edit
+% the parameters in the scripts 'random_check'
+% FIRST GO TO YOUR CHOSEN DATA FOLDER
 
 % choosing condition in data
 data_flag = DATA_FLAG;
@@ -25,12 +25,12 @@ switch data_flag
     case 6
         subdata = 'H_DVT';
     otherwise
-    h = errordlg('please input flag (between 1-6) to choose condition of data'); pause;
+        h = errordlg('please input flag (between 1-6) to choose condition of data'); pause;
 end
 
 info = what;
-info.mat = sortn(info.mat);              % sorts lists ascending
-random_check_param;                      % sets wanted parameters
+info.mat = sortn(info.mat);                                                 % sorts lists ascending
+[c t elecs thresh] = random_check_param;                                           % sets wanted parameters
 subjects = length(info.mat);
 data_kind = {['data.' subdata]};
 
@@ -39,9 +39,9 @@ data_kind = {['data.' subdata]};
 chosen_s = randi(subjects,1,1);
 
 % load subject
-to_load = info.mat(chosen_s);           % in a cell cuz 'load' works on cells
+to_load = info.mat(chosen_s);                                               % in a cell cuz 'load' works on cells
 loaded = cellfun(@load,to_load);
-DATA = loaded.data.(sprintf(subdata))(1:256,:,:);     % throws away reference elec #257
+DATA = loaded.data.(sprintf(subdata))(1:256,:,:);                           % throws away reference elec #257
 clear loaded
 
 % concatenate trials in every channel
@@ -63,22 +63,18 @@ if plot_flag == 1
     mtit('z-scores of random channels');
 end
 
-%% Z-scoring 
-
-thresh = 3;                             % sets STD thresh of "deviant"               
+%% Z-scoring
 
 % zscoring all data
-z_long_elec = zscore(long_elec,[],2);      
+z_long_elec = zscore(long_elec,[],2);
 
 % generate matrix to plot
 z_plot = z_long_elec(chosen_c,:);
 deviants = z_plot >= thresh  | z_plot <= -thresh  ;
 
+
 %% back to z by trials
-
 z_plot_trials = reshape(z_plot,[c,size(DATA)]);
-
-
 
 %% plotting
 if plot_flag == 1
@@ -93,10 +89,11 @@ if plot_flag == 1
         ylabel('z-score')
     end
     mtit('z-scores of random channels');
-   
+    
 end
-    %Averaging across subjects:
-    dev_prcnt = round(sum(sum(deviants))*100/length(long_elec),2);
+
+%Averaging across subjects:
+dev_prcnt = round(sum(sum(deviants))*100/length(long_elec),2);
 
 if plot_flag == 1
     fprintf('%% of data over 3 STD : %G%%', dev_prcnt)
