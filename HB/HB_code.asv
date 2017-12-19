@@ -1,5 +1,6 @@
 function [hb_in_elecs , counter] = HB_code(PRINT)
 % finding Heart Beat boom boom
+PRINT = PRINT;
 data_paths = {'E:\DOC\Data from Jaco\CTRL';...
     'E:\DOC\Data from Jaco\EMCS';...
     'E:\DOC\Data from Jaco\MCS';...
@@ -61,7 +62,7 @@ for c = 1:length(conds)                                                    % ove
     matched_not_good = setdiff(hb_in_elecs.(sprintf('%s',conds{c})).HB,not_good);
     hb_in_elecs.(sprintf('%s',conds{c})).matched_bad_chan_list = matched_not_good;  
 
-    if PRINT == 1
+    if PRINT
     fprintf('\n thresholding at %g%% of trials per electrode and at %g%% of subjects',thresh_in_elec*100, thresh_across_sbj*100)
     fprintf('\n In condition %s, Heart beat was detected in %g electrodes:',conds{c}, length(hb_in_elecs.(sprintf('%s',conds{c}))));
     fprintf('\n%g',hb_in_elecs.(sprintf('%s',conds{c})));
