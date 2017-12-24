@@ -1,5 +1,0 @@
-digraph AAAAAAAAAAAAAAAAAAAAAAAAA1_calls{
-rankdir="LR"
-node [shape=box, color=blue, facecolor=white]
-AAAAAAAAAAAAAAAAAAAAAAAAA1 -> AAAAAAAAAAAAAAAAAAAAAAA2;
-}

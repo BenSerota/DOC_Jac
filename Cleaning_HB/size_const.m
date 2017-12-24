@@ -1,4 +1,5 @@
 % testing for consistent size
+% This code was made to check consistency of data set sizes (spec: having 256 chennels )
 
 clear
 subdata = {'LSGS';'LSGD';'LDGS';'LDGD'};

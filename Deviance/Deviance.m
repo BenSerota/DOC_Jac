@@ -1,4 +1,4 @@
-function [mean_dev , SE] = Deviance_non_random (subconds, thresh)
+function [mean_dev , SE] = Deviance (COND, subconds, thresh)
 % Calculates th deviance of data above a given STD threshold (given in the
 % nested non_random_check function), in all data files in the inputed path.
 
@@ -8,6 +8,17 @@ close all
 load good_channels
 info = what;
 n = length(info.mat);                                                       % # of subjects in given directory
+switch COND
+    case 'CTRL'
+        cond = 4;
+    case 'EMCS'
+        cond = 3;
+    case 'MCS'
+        cond = 2;
+    otherwise
+        cond = 1;
+end
+
 
 for i = 1:n                                                                 % over subjects
     
@@ -18,20 +29,11 @@ for i = 1:n                                                                 % ov
         DATA = data.(subconds{ii})(good_channels,:,:);                      % chooses only scalp channels
         data_z = zscore(DATA,[],3);                                         % z scores according to trial
         data_z = reshape(data_z,size(DATA,1),[]);
-        STD_m(i,ii) = mean(std(data_z));                                    % MEAN of STD?! i.e. across time points, across channels
         deviants = data_z >= thresh  | data_z <= -thresh  ;
-        prcnt_dev(i).(sprintf(subconds{ii})) = nnz(deviants)*100 / (size(data_z,1)*size(data_z,2)) ;
+        CELL{cond}(i,ii)= nnz(deviants)*100 / numel(deviants);              % CELL is condsXsbjXsubconds
     end
 end
 
-full_mat = reshape(cell2mat(struct2cell(prcnt_dev)),[n,length(subconds)])';
-
-for ii = length(subconds):-1:1
-    mean_dev.(sprintf(subconds{ii})) = mean(full_mat(:,ii));
-end
-
-STD_m_m = mean(STD_m,1);
-
-for ii = length(subconds):-1:1
-    SE.(sprintf(subconds{ii})) = STD_m_m(ii)/sqrt(n);
-end
+mean_dev = mean(CELL{cond},1);
+STD = std(CELL{cond});
+SE = STD./sqrt(n);

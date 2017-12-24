@@ -1,5 +1,6 @@
 %% Checking Data deveation from normal distribution
 clear
+profile on
 
 data_paths = {'E:\DOC\Data from Jaco\VS';'E:\DOC\Data from Jaco\MCS';...
     'E:\DOC\Data from Jaco\EMCS';'E:\DOC\Data from Jaco\CTRL'};
@@ -12,38 +13,45 @@ thresh = 3;
 
 for i = length(conds):-1:1                                                     % over conditions
     cd(data_paths{i})                                                       % changes conditions
-    %     cd(mac_data_paths{i})                                                    % changes conditions
-    [Dev_all.(sprintf(conds{i})) , SE2.(sprintf(conds{i})) ] = Deviance_non_random(subconds, thresh);
+%         cd(mac_data_paths{i})                                                    % changes conditions
+    [Dev_all(i,:) , SE(i,:) ] = Deviance(conds{i}, subconds, thresh);
 end
 
-%% prep for plotting
 
-% transferring dev values to full matrix
-for i = length(conds):-1:1
-    y(i,:) = cell2mat(struct2cell(Dev_all.(sprintf(conds{i}))));
-end
+%% plotting
 
-% transferring SE values to full matrix
-for i = length(conds):-1:1
-    for ii = length(subconds):-1:1
-        SE_full(i,ii) = SE2.(sprintf(conds{i})).(sprintf(subconds{ii}));
-    end
-end
+y_lim = 1.1*max(max(Dev_all));                                              % setting and uniforming y axis limit. just wanted 1.1 times the max value, to give some space
 
-%% Plotting
+% Opt(1)
+bar(Dev_all)
+hold on
+errorbar(Dev_all,SE,'r.')
+ylim([0 y_lim])
+title(sprintf(' %s - Deviation from normal distribution', conds{i}))
+set(gca,'xticklabel',subconds)
+ylim([0 y_lim])
+ylabel(sprintf('%% of Events above %g STD', thresh))
 
-y_lim = max(max(y));
+
+
+% Opt (2)
 figure()
-for i = length(y):-1:1
+for i = length(Dev_all):-1:1
     subplot(1,4,i)
-    temp = y(i,:);
-    temp_se = SE_full(i,:);
-    bar(temp) %,'FaceColors',colors) %,'FaceColor','flat')
-    ylim([0 y_lim+.5])
+    temp_y = Dev_all(i,:);
+    temp_se = SE(i,:);
+%     colors = lines(length(temp_y));
+    bar(temp_y);
+    ylim([0 y_lim])
     title(sprintf(' %s - Deviation from normal distribution', conds{i}))
     set(gca,'xticklabel',subconds)
-    ylim([0 y_lim+.5])
+    ylim([0 y_lim])
     ylabel(sprintf('%% of Events above %g STD', thresh))
     hold on
-    errorbar(temp,temp_se,'r.')
+    errorbar(temp_y,temp_se,'r.')
 end
+
+p = profile('info');
+profile viewer
+
+
