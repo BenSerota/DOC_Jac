@@ -37,14 +37,18 @@ for i = length(conds):-1:1                                                  % ov
             %% reference to #257
             EEG = pop_reref( EEG, 257);
             [ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, 1,'overwrite','on','gui','off');
+
             %% throw away non-scalp channels
             EEG = pop_select( EEG, 'channel',[good_channels] );
             [ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, 1,'overwrite','on','gui','off');
             %% stat reject channels: kurtosis + probability (both @ 4STD)
             EEG = pop_rejchan(EEG, 'elec',[1:EEG.nbchan] ,'threshold',4,'norm','on','measure','kurt');
+            EEG = eeg_checkset( EEG );
             EEG = pop_rejchan(EEG, 'elec',[1:EEG.nbchan] ,'threshold',4,'norm','on','measure','prob');
+            EEG = eeg_checkset( EEG );
             %% interpolate lost channels
-            EEG = pop_interp(EEG,EEG.chanlocs,'spherical');
+%             badchans = ?? ;
+%             EEG = pop_interp(EEG, badchans);
             
             %% stat reject epochs (over ? STD)
             EEG = pop_autorej(EEG, 'nogui','on','eegplot','off');
