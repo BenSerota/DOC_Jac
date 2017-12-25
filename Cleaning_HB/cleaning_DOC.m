@@ -40,7 +40,7 @@ for ii = 1:length(info.mat)                                             % over s
         EEG = eeg_checkset( EEG );
         EEG = pop_rejchan(EEG, 'elec',[1:EEG.nbchan] ,'threshold',4,'norm','on','measure','prob');
         EEG = eeg_checkset( EEG );
-        %% stat reject epochs (over )
+        %% stat reject epochs (over ? STD)
         EEG = pop_autorej(EEG, 'nogui','on','eegplot','off');
         [ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, 1,'overwrite','on','gui','off');
         

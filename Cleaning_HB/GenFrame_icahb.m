@@ -14,13 +14,17 @@ out_paths = {'E:\DOC\Data_Jaco_prep\VS';'E:\DOC\Data_Jaco_prep\MCS';...
 conds = {'VS';'MCS';'EMCS';'CTRL'};
 subconds = {'LSGS';'LSGD';'LDGS';'LDGD'};
 
-for i = length(conds):-1:1                                                     % over conditions
+for i = length(conds):-1:1                                                  % over conditions
     cd(data_paths{i})                                                       % changes conditions
-%         cd(mac_data_paths{i})                                                    % changes conditions
-    [DATA, ICA_weights] = cleaning_DOC (conds{i}, subconds, out_paths);
-    ICA_comp = ICA;
+    %     cd(mac_data_paths{i})                                                   % changes conditions
+    
+    % Clean this condition i, with these subconditions, and throw output to
+    % these paths. DATA gives cleaned and preprocessed data.
+    [DATA, ICA_weights] = cleaning_DOC(conds{i}, subconds, out_paths);
+    % reconstructing components (to be transferred to a different script)
+    ICA_comp = (ICA_weights^-1) * DATA * ICA_weights;
     hb()
-
+    
 end
 
 
