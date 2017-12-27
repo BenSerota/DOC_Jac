@@ -2,18 +2,12 @@
 clear
 profile on
 
-data_paths = {'E:\DOC\Data from Jaco\VS';'E:\DOC\Data from Jaco\MCS';...
-    'E:\DOC\Data from Jaco\EMCS';'E:\DOC\Data from Jaco\CTRL'};
-mac_data_paths = {'/Users/admin/Desktop/DACOBO_h/VS';'/Users/admin/Desktop/DACOBO_h/EMCS';...
-    '/Users/admin/Desktop/DACOBO_h/MCS';'/Users/admin/Desktop/DACOBO_h/CTRL'};
+DOC_basic
 
-conds = {'VS';'MCS';'EMCS';'CTRL'};
-subconds = {'LSGS';'LSGD';'LDGS';'LDGD'};
 thresh = 3;
 
 for i = length(conds):-1:1                                                     % over conditions
     cd(data_paths{i})                                                       % changes conditions
-%         cd(mac_data_paths{i})                                                    % changes conditions
     [Dev_all(i,:) , SE(i,:) ] = Deviance(conds{i}, subconds, thresh);
 end
 

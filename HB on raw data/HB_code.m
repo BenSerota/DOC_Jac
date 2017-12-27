@@ -1,11 +1,7 @@
 function [hb_in_elecs , counter] = HB_code(PRINT)
 % finding Heart Beat boom boom
-data_paths = {'E:\DOC\Data from Jaco\CTRL';...
-    'E:\DOC\Data from Jaco\EMCS';...
-    'E:\DOC\Data from Jaco\MCS';...
-    'E:\DOC\Data from Jaco\VS'};
-conds = {'CTRL';'EMCS';'MCS';'VS'};
-subconds = {'LDGD';'LDGS';'LSGD';'LSGS'};
+DOC_basic
+
 nchan = 256;
 % subjects = length(info.mat);
 thresh_in_elec = 0.1;                                                      % threshold ratio of heart rate detected

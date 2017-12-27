@@ -6,10 +6,7 @@ start_ben
 profile on
 
 % data is ICA outputs
-data_paths = {'E:\DOC\Data_Jaco_prep\VS';'E:\DOC\Data_Jaco_prep\MCS';...
-    'E:\DOC\Data_Jaco_prep\EMCS';'E:\DOC\Data_Jaco_prep\CTRL'};
-conds = {'VS';'MCS';'EMCS';'CTRL'};
-subconds = {'LSGS';'LSGD';'LDGS';'LDGD'};
+DOC_basic
 
 for i = length(conds):-1:1                                                  % over conditions
     cd(data_paths{i})                                                       % changes conditions
