@@ -67,7 +67,7 @@ for i = length(conds):-1:1                                                  % ov
             DATA_cont.(sprintf(subconds{j})) = EEG.data;
             
         end
-        %% saving variables
+        %% saving variables                                                 % saves per subject
         cd(out_paths{i})
         save(sprintf('icaW_%s', name),'ICA_weights')
         save(sprintf('icaSph_%s', name),'ICA_spheres')
