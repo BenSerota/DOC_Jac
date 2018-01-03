@@ -8,7 +8,7 @@ start_ben
 % data is ICA outputs
 DOC_basic
 
-for i = length(conds):-1:3       % ONLY TWO                                           % over conditions
+for i = length(conds):-1:1                                                  % over conditions
     cd(out_paths{i})                                                        % changes conditions. out_paths becaus out of original script is now this in-path
     load(sprintf('%s_names',conds{i}));                                     % loads name list
     names = sortn(names);                                                   % for fun
@@ -34,7 +34,7 @@ for i = length(conds):-1:3       % ONLY TWO                                     
             Comps2Reject.(sprintf(subconds{j})).channels = ...              % identifies channels
                 find(hb.(sprintf(subconds{j})))';
             
-            lengths(j) = length(Comps2Reject.(subconds{j}).channels);                % storing for use later
+            lengths(j) = length(Comps2Reject.(subconds{j})).channels;                % storing for use later
             chans{j} = Comps2Reject.(sprintf(subconds{j})).channels;        % storing for use later
             first = ismember...                                             % flags if first component is HB
                 (1,Comps2Reject.(sprintf(subconds{j})).channels);
@@ -48,10 +48,10 @@ for i = length(conds):-1:3       % ONLY TWO                                     
         %% adding additional info
         
         Comps2Reject.ave_amount = round(mean(lengths));
-        Comps2Reject.ave_precent = Comps2Reject.ave_amount*100/jj;
+        Comps2Reject.ave_precent = Comps2Reject.ave_amount/jj;
         Comps2Reject.joint = mintersect(chans{1},chans{2},chans{3},chans{4});
         
-        save(sprintf('%s_HBICs',name(1:end-5)),'Comps2Reject')                                  % saves list of ICs to reject in prep folder
+        save(sprintf('%s_HBICs',name(1:end-6)),'Comps2Reject')                                  % saves list of ICs to reject in prep folder
         
     end
     

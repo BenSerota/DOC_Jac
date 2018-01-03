@@ -2,6 +2,8 @@ clear
 clc
 profile on
 
+% myFcn(1)
+
 DOC_basic
 
 load good_channels
@@ -13,6 +15,7 @@ fileloc = fullfile(peeglab, 'sample_locs', fileloc);
 [ALLEEG EEG CURRENTSET ALLCOM] = eeglab;                                    % Open EEGlab
 pop_editoptions('option_storedisk', 1);                                     % keep only 1 data set in memory.
 pop_editoptions( 'option_computeica', 0);                                   % don't compute ica_act
+pop_editoptions( 'option_saveversion6', 0);                                 % allows files larger than 2GB to be written
 
 for i = length(conds):-1:1                                                  % over conditions
     cd(data_paths{i})                                                       % changes conditions
@@ -55,19 +58,25 @@ for i = length(conds):-1:1                                                  % ov
                     EEG.epoch = 1;
                     
                     %% ICA
-                    EEG = pop_runica(EEG, 'extended',5,'interrupt','off');
+                    EEG = pop_runica(EEG, 'extended',5,'interrupt','on');
+%                     EEG = pop_runica(EEG, ); % FASTICA
+                    
                     [ALLEEG EEG] = eeg_store(ALLEEG, EEG, CURRENTSET);
                     %% preparing variables to save (includes all subconds)
                     % Components = Weights * sphere * Data
                     final.(sprintf(subconds{j})).sph = EEG.icasphere;
                     final.(sprintf(subconds{j})).w = EEG.icaweights;
                     final.(sprintf(subconds{j})).data = EEG.data;
+                    
+                    clear EEG DATA 
+                    ALLEEG = [];
+                    
                 catch
                     c = c + 1;
                     Fucked_up_stuff{c,1} = {sprintf('%s %s',name,subconds{j})};
                 end
                 
-                fprintf('progress: %s %s %s', cond{i}, name, subcond{ii})
+                fprintf('\n \n progress: %s %s %s \n \n', conds{i}, name, subconds{j})
                 
             end
             %% saving variables                                            % saves per subject
