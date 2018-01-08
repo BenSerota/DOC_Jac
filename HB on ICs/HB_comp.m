@@ -8,7 +8,7 @@ start_ben
 % data is ICA outputs
 DOC_basic
 
-for i = length(conds):-1:3       % ONLY TWO                                           % over conditions
+for i = length(conds):-1:1                                                      % over conditions
     cd(out_paths{i})                                                        % changes conditions. out_paths becaus out of original script is now this in-path
     load(sprintf('%s_names',conds{i}));                                     % loads name list
     names = sortn(names);                                                   % for fun
