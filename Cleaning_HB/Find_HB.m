@@ -1,21 +1,27 @@
 
-%looking for heart beat
+% This code looks for heart beat using hb2fnd in every ICA component
+% in every task, in every subject.
+% order:
+% 1. compose the ICA activation mat
+% 2. identify hb in ICs
+% 3. save a profile of the subj
+
 clear
 clc
 start_ben
-% profile on
+profile on
 
-% data is ICA outputs
+% input data here is the output of PrePro_ICA 
 DOC_basic
 
-for i = length(conds):-1:1                                                      % over conditions
+for i = length(conds):-1:1                                                  % over conditions
     cd(out_paths{i})                                                        % changes conditions. out_paths becaus out of original script is now this in-path
     load(sprintf('%s_names',conds{i}));                                     % loads name list
     names = sortn(names);                                                   % for fun
     for q = 1:length(names)                                                 % drops '.mat' ending
         names{q,1} = names{q,1}(1,1:end-4);
     end
-    %     info = what;
+    
     for ii = 1:length(names)                                                 % over subjects
         name = sprintf('%s_prep',names{ii});
         
@@ -25,19 +31,20 @@ for i = length(conds):-1:1                                                      
         for j = length(subconds):-1:1                                       % treating each subcondition seperately
             DATA = final.(sprintf(subconds{j}));
             
-            % ICs = W * Sph * Raw:
-            ICs = DATA.w * DATA.sph * DATA.data;
+            % ICA activation matrix  = W * Sph * Raw:
+            ICAact = DATA.w * DATA.sph * DATA.data;
             
-            for jj = 1:size(ICs,1)                                          % per component
-                hb.(sprintf(subconds{j}))(jj) = hbs2fnd(ICs(jj,:));         % returns 0/1
+            for jj = 1:size(ICAact,1)                                          % per component
+                hb.(sprintf(subconds{j}))(jj) = hbs2fnd(ICAact(jj,:));         % returns 0/1
             end
-            Comps2Reject.(sprintf(subconds{j})).channels = ...              % identifies channels
+            
+            Comps2Reject.(sprintf(subconds{j})).ICs = ...              % identifies ICs
                 find(hb.(sprintf(subconds{j})))';
             
-            lengths(j) = length(Comps2Reject.(subconds{j}).channels);                % storing for use later
-            chans{j} = Comps2Reject.(sprintf(subconds{j})).channels;        % storing for use later
+            lengths(j) = length(Comps2Reject.(subconds{j}).ICs);            % storing for use later
+            ICs{j} = Comps2Reject.(sprintf(subconds{j})).ICs;             % storing for use later
             first = ismember...                                             % flags if first component is HB
-                (1,Comps2Reject.(sprintf(subconds{j})).channels);
+                (1,Comps2Reject.(sprintf(subconds{j})).ICs);
             if first
                 Comps2Reject.(sprintf(subconds{j})).first = 'TRUE';
             else
@@ -49,10 +56,11 @@ for i = length(conds):-1:1                                                      
         
         Comps2Reject.ave_amount = round(mean(lengths));
         Comps2Reject.ave_precent = Comps2Reject.ave_amount*100/jj;
-        Comps2Reject.joint = mintersect(chans{1},chans{2},chans{3},chans{4});
+        Comps2Reject.joint = mintersect(ICs{1},ICs{2},ICs{3},ICs{4});
         
         save(sprintf('%s_HBICs',name(1:end-5)),'Comps2Reject')                                  % saves list of ICs to reject in prep folder
         
     end
     
 end
+profile viewer
