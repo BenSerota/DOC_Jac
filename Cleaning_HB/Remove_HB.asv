@@ -49,9 +49,9 @@ for i = length(conds):-1:1                                                  % ov
             
             % testing for rej problem
 %             rejtest = [Comps2Reject.LDGD; Comps2Reject.LDGS; Comps2Reject.LSGD; Comps2Reject.LSGS];
-            rejtest = rej(rej>len)
+            rejtest = rej(rej>len);
             
-            HB_ICs.(subconds{j}) = ICAact(rej,:);
+            HB_ICs.(subconds{j}) = ICAact(rej,:); % PROBLEM HERE: rej is larger than len for some reason. possible mixup of data?
             ICAact(rej,:) = [];
             w_inv = pinv(DATA.w*DATA.sph);
             w_inv(:,rej) = [];  % rejecting corresponding colomns

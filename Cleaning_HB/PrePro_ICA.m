@@ -24,10 +24,10 @@ for i = length(conds):-1:1                                                  % ov
     for ii = 1:length(info.mat)                                             % over subjects
         try                                                                 % trying a subject
             %% load into Workspace
-            loaded = load(info.mat{ii});                                    % loads data of one sbj
             name = info.mat{ii};
+            loaded = load(name);                                            % loads data of one sbj
             name = name(1:end-4);                                           % drops the '.mat' ending
-            for j = 1:length(subconds)                                      % over sub conds (tasks)
+            for j = 3; %1:length(subconds)                                      % over sub conds (tasks)
                 try                                                         % trying a subcondition
                     %% import one subcond matrix into eeglab
                     DATA = loaded.data.(sprintf(subconds{j}));             % our EEGlab data
@@ -59,8 +59,6 @@ for i = length(conds):-1:1                                                  % ov
                     
                     %% ICA
                     EEG = pop_runica(EEG, 'extended',5,'interrupt','on');
-%                     EEG = pop_runica(EEG, ); % FASTICA
-                    
                     [ALLEEG EEG] = eeg_store(ALLEEG, EEG, CURRENTSET);
                     %% preparing variables to save (includes all subconds)
                     % Components = Weights * sphere * Data

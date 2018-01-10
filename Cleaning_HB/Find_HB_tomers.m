@@ -6,7 +6,7 @@
 % 2. identify hb in ICs
 % 3. save a profile of the subj
 
-% clear
+clear
 clc
 start_ben
 profile on
@@ -18,7 +18,7 @@ for i = length(conds):-1:1                                                  % ov
     cd(out_paths{i})                                                        % changes conditions. out_paths becaus out of original script is now this in-path
     load(sprintf('%s_names',conds{i}));                                     % loads name list
     names = sortn(names);                                                   % for fun
-    strrep(names,'.mat','')                                                 % drops '.mat' ending
+    names = strrep(names,'.mat','');                                        % drops '.mat' ending
        
     
     for ii = 1:length(names)                                                 % over subjects
@@ -26,37 +26,39 @@ for i = length(conds):-1:1                                                  % ov
         
         %% load each set of ICs per subj per task
         load(name);                                                         % load subject
+        compNum = 0;
         
-        for j = 1:length(subconds); %:-1:1                                       % treating each subcondition seperately
-            DATA = final.(sprintf(subconds{j}));
-            
+        for j = length(subconds):-1:1                                       % treating each subcondition seperately
+            DATA = final.(subconds{j});
+
             % ICA activation matrix  = W * Sph * Raw:
             ICAact = DATA.w * DATA.sph * DATA.data;
-            
+            hb.(subconds{j}) = zeros(1,size(ICAact,1));
+            compNum = compNum + size(ICAact,1);
             for jj = 1:size(ICAact,1)                                          % per component
-                hb.(sprintf(subconds{j}))(jj) = hbs2fnd(ICAact(jj,:));         % returns 0/1
+                hb.(subconds{j})(jj) = hbs2fnd(ICAact(jj,:));         % returns 0/1
             end
-            
-            Comps2Reject.(sprintf(subconds{j})).ICs = ...              % identifies ICs
-                find(hb.(sprintf(subconds{j})))';
-            
-            lengths(j) = length(Comps2Reject.(subconds{j}).ICs);            % storing for use later
-            ICs{j} = Comps2Reject.(sprintf(subconds{j})).ICs;             % storing for use later
-            first = ismember...                                             % flags if first component is HB
-                (1,Comps2Reject.(sprintf(subconds{j})).ICs);
-            if first
-                Comps2Reject.(sprintf(subconds{j})).first = 'TRUE';
-            else
-                Comps2Reject.(sprintf(subconds{j})).first = 'FALSE';
-            end
+ 
+            Comps2Reject.(subconds{j}) = ...              % identifies ICs
+                find(hb.(subconds{j}))';
+
+            lengths(j) = length(Comps2Reject.(subconds{j}));            % storing for use later
+            ICs{j} = Comps2Reject.(subconds{j});             % storing for use later
+%             first = ismember...                                             % flags if first component is HB
+%                 (1,Comps2Reject.(subconds{j}).ICs);
+%             if first
+%                 Comps2Reject.(subconds{j}).first = 'TRUE';
+%             else
+%                 Comps2Reject.(subconds{j}).first = 'FALSE';
+%             end
         end
         
         %% adding additional info
         
         Comps2Reject.ave_amount = mean(lengths);
-        Comps2Reject.ave_precent = mean(lengths)*100/jj;
-        Comps2Reject.joint = mintersect(ICs{1},ICs{2},ICs{3},ICs{4});
-        save(sprintf('%s_HBICs4',name(1:end-5)),'Comps2Reject')                                  % saves list of ICs to reject in prep folder
+        Comps2Reject.ave_precent = sum(lengths)*100/compNum;
+%         Comps2Reject.joint = mintersect(ICs{1},ICs{2},ICs{3},ICs{4});
+        save(sprintf('%s_HBICs',name(1:end-5)),'Comps2Reject')                                  % saves list of ICs to reject in prep folder
         
     end
     
