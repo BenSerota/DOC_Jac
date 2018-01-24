@@ -26,7 +26,7 @@ for i = [2 1] %length(conds):-1:1                                               
             %% load into Workspace
             name = info.mat{ii};
             loaded = load(name);                                            % loads data of one sbj
-            name = name(1:end-4);                                           % drops the '.mat' ending
+            name = strrep(name,'.mat','');                                  % drops the '.mat' ending
             for j = 1:length(subconds)                                      % over sub conds (tasks)
                 try                                                         % trying a subcondition
                     %% import one subcond matrix into eeglab

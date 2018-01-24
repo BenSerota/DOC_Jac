@@ -1,16 +1,29 @@
-function hb = hbs2fnd(ts,sr,thresh)
+function [hb,rates,cvs] = hbs2fnd(ts,sr,thresh,prun,bps)
+%hb_flag = hbs2fnd(ts,srate,thresh)
+%ts column vac input; thresh in SD units
 %%%%%%%%perhaps add a user defined thresh option
-
+%bps - breakpoints (if epochs). ruled out a possible events
 if size(ts,2) > size(ts,1)
     ts = permute(ts,[2 1 3]);
 end
-if ~exist('sr','var')
+if ~exist('sr','var') || isempty(sr)
     sr = 250;
 end
-if ~exist('thresh','var')
+if ~exist('thresh','var') || isempty(thresh)
     thresh = 3;
 end
+if ~exist('prun','var') 
+    prun = 0;
+end
+if ~exist('bps','var') 
+    bps = [];
+end
 ts = zscore(ts);
+if prun
+    msk = abs(mzscore(ts))>3.5;
+    ts = (ts - mean(ts(~msk)))/std(ts(~msk));
+    ts(msk) = 0;
+end
 if thresh < 1
     if thresh < 0.5
         thresh = 1 - thresh;
@@ -25,23 +38,36 @@ else
     thresh = sort([-thresh thresh]);
 end
 pmsk = ts > thresh(2);
-pmsk = msk2rstr(pmsk,ts,1);
+pmsk = msk2rstr(pmsk,ts,1,bps);
 nmsk = ts < thresh(1);
-nmsk = msk2rstr(nmsk,ts,0);
+nmsk = msk2rstr(nmsk,ts,0,bps);
 nisi = diff(find(nmsk));
-pisi = diff(find(pmsk));
 ncv = std(nisi)/mean(nisi);
-pcv = std(pisi)/mean(pisi);
 nrate = mean(nisi)/sr;
+nrate2 = length(nisi)/(length(ts)/sr);
+
+pisi = diff(find(pmsk));
+pcv = std(pisi)/mean(pisi);
 prate = mean(pisi)/sr;
-if crit2aply(pcv,prate) || crit2aply(ncv,nrate)
+prate2 = length(pisi)/(length(ts)/sr);
+    
+if crit2aply(pcv,prate,prate2) || crit2aply(ncv,nrate,nrate2)
     hb = 1;
 else
     hb = 0;
 end
+if nargout > 1
+   rates = [prate nrate];
+   cvs = [pvc nvc];
+end
 
-function h = crit2aply(cv,rate)
+function h = crit2aply(cv,rate,rate2)
 
+%hbs need to be consistently detected
+if rate2/rate<0.75
+    h = 0;
+    return
+end
 if cv<.5 && rate>.5 && rate <2
     h = 1;
 elseif cv<1 && rate>.8 && rate <1.9
@@ -52,11 +78,14 @@ else
     h = 0;
 end
 
-function msk = msk2rstr(msk,ts,pos)
+function msk = msk2rstr(msk,ts,pos,bps)
 
 smpls = size(msk,1);
-msk = [msk;zeros(1,size(ts,2))]; %col([msk;zeros(1,size(ts,2))]);
-ts = [ts;zeros(1,size(ts,2))]; %col([ts;zeros(1,size(ts,2))]);
+msk = [msk;zeros(1,size(ts,2))]; % BEN CHANGED THIS TO AVOID COL ERROR
+msk = msk(:);
+
+ts = [ts;zeros(1,size(ts,2))];
+ts = ts(:);
 [s,e] = enpoints2find(msk);
 if isempty(s)
     return
@@ -77,6 +106,9 @@ msk = msk*0;
 msk(inds) = 1;
 msk = reshape(msk,[smpls+1 length(msk)/(smpls+1)]);
 msk(end,:) = '';
+if ~isempty(bps)
+   msk(bps,:) = 0; 
+end
 
 function [s,e] = enpoints2find(msk)
 %msk is assumed to be a column binary vector
