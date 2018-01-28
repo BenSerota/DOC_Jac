@@ -119,39 +119,71 @@ cd('E:\DOC\Data_Jaco_prep')
 save ('Loss_Report', 'STATS', 'Fucked_up_stuff', 'C')
 
 %% plotting
+% violin plots (=distributionPlot)
 colors = {'g','y','b','k'};
-% violin plots
+
+%% percentages 
+cd('E:\Dropbox\Ben Serota\momentary\Figs')
 % first: TOT
 for i = 1:4
-    d{i} = STATS.(conds{i}).TOT;
+    d{i} = STATS.(conds{i}).pr.TOT;
 end
-figure()
+f1 = figure();
 title('Percentages of data lost (channels+epochs)')
 distributionPlot (d,'xNames',conds,'showMM',4,'histOpt',1,'globalNorm',0,...
     'color',colors) % norm,1, hist,0 , 'variableWidth','false'
 ylabel('Percent of data rejected')
+savefig(f1,'DataLoss_TOT')
 
 % second: chans
 for i = 1:4
-    d_chan{i} = STATS.(conds{i}).ch;
+    d_chan{i} = STATS.(conds{i}).pr.ch;
 end
-figure()
-title('Percentages of data lost by CHANNEL rejections)')
+f2 = figure();
+title('Percentages CHANNELS rejected')
 distributionPlot (d_chan,'xNames',conds,'showMM',4,'histOpt',1,'globalNorm',0,...
     'color',colors) % norm,1, hist,0 , 'variableWidth','false'
 ylabel('Percent of data rejected')
+savefig(f2,'DataLoss_n_chan')
 
-% second: epochs
+% third: epochs
 for i = 1:4
-    d_epoch{i} = STATS.(conds{i}).ep;
+    d_epoch{i} = STATS.(conds{i}).pr.ep;
 end
-figure()
-title('Percentages of data lost by EPOCH rejections)')
+f3 = figure();
+title('Percentages of EPOCH rejected')
 distributionPlot (d_epoch,'xNames',conds,'showMM',4,'histOpt',1,'globalNorm',0,...
     'color',colors) % norm,1, hist,0 , 'variableWidth','false'
 ylabel('Percent of data rejected')
+savefig(f3,'DataLoss_n_epoch')
+
+%% absolute values
+clear d d_chan d_epoch
+
+% first: chans
+for i = 1:4
+    d_chan{i} = STATS.(conds{i}).ab.ch;
+end
+f4 = figure();
+title('Number of CHANNELS rejected')
+distributionPlot (d_chan,'xNames',conds,'showMM',4,'histOpt',1,'globalNorm',0,...
+    'color',colors) % norm,1, hist,0 , 'variableWidth','false'
+ylabel('Percent of data rejected')
+savefig(f4,'DataLoss_p_chan')
+
+% second: epochs
+for i = 1:4
+    d_epoch{i} = STATS.(conds{i}).ab.ep;
+end
+f5 = figure();
+title('Number of EPOCH rejected')
+distributionPlot (d_epoch,'xNames',conds,'showMM',4,'histOpt',1,'globalNorm',0,...
+    'color',colors) % norm,1, hist,0 , 'variableWidth','false'
+ylabel('Percent of data rejected')
+savefig(f5,'DataLoss_p_epoch')
 
 tilefigs
+
 
 %%
 profile viewer
