@@ -49,7 +49,7 @@ for i = length(conds):-1:1                                                  % ov
             
             % testing for rej problem
 %             rejtest = [Comps2Reject.LDGD; Comps2Reject.LDGS; Comps2Reject.LSGD; Comps2Reject.LSGS];
-            rejtest = rej(rej>len)
+            rejtest = rej(rej>len);
             
             HB_ICs.(subconds{j}) = ICAact(rej,:);
             ICAact(rej,:) = [];

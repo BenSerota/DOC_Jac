@@ -1,6 +1,6 @@
 
 conds = {'VS';'MCS';'EMCS';'CTR'};
-subconds =  {'LSGS';'LSGD';'LDGS';'LDGD'}; %{'LDGD';'LSGD';'LSGS';'LDGS'}; %{'LDGD';'LDGS';'LSGD';'LSGS';};% original: {'LSGS';'LSGD';'LDGS';'LDGD'}; 
+subconds =  {'LSGS';'LSGD';'LDGS';'LDGD'}; %{'LDGD';'LSGD';'LSGS';'LDGS'}; %{'LDGD';'LDGS';'LSGD';'LSGS';};% original: {'LSGS';'LSGD';'LDGS';'LDGD'};
 Fucked_up_stuff = {};
 c = 0;
 
@@ -19,7 +19,6 @@ elseif ismac
         data_paths{i} = sprintf('%s%s',in_root,conds{i});
         out_paths{i} = sprintf('%s%s',out_root,conds{i});
     end
-    
 end
 
 data_paths = data_paths';
