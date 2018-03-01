@@ -25,3 +25,4 @@ end
 
 data_paths = data_paths';
 out_paths = out_paths';
+LZC_nohb_outpath = 'E:\Dropbox\Ben Serota\eeg ANALYSES\LZ\BenLZ\Zhang no HB\results';
