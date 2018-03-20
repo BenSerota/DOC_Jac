@@ -12,11 +12,11 @@ if ispc
         out_paths{i} = sprintf('%s%s',out_root,conds{i});
     end
     WS_path = 'E:\Dropbox\Ben Serota\momentary\WS';
-    Fig_path = 'E:\Dropbox\Ben Serota\momentary\Figs';
+    mom_Fig_path = 'E:\Dropbox\Ben Serota\momentary\Figs';
     
 elseif ismac
     in_root = '/Users/admin/Desktop/DACOBO_h/origin/';
-    out_root = '/Users/admin/Desktop/DACOBO_h/prep/';
+    out_root = '/Users/admin/Desktop/DACOBO_h/mock/';
     for i = length(conds):-1:1
         data_paths{i} = sprintf('%s%s',in_root,conds{i});
         out_paths{i} = sprintf('%s%s',out_root,conds{i});

@@ -9,7 +9,9 @@ function [CAT] = matcat (STRCT)
     % combining avalanches. 
 
 subcndt = fields(STRCT);
-subcndt(5:6) = [];                                                          % no need for last 2 sub-conditions
+if length(subcndt) > 4
+    subcndt(5:6) = [];                                                          % no need for last 2 sub-conditions
+end
 
 % adding 0 after every trial
 for i = 1:length(subcndt)

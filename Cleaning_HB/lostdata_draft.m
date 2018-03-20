@@ -120,7 +120,7 @@ save ('Loss_Report', 'STATS', 'Fucked_up_stuff', 'C')
 
 %% plotting
 % violin plots (=distributionPlot)
-colors = {'g','y','b','k'};
+colors = {'g';'r';'m';'b'};
 
 %% percentages 
 cd('E:\Dropbox\Ben Serota\momentary\Figs')
