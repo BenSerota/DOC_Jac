@@ -13,6 +13,7 @@ if ispc
     end
     WS_path = 'E:\Dropbox\Ben Serota\momentary\WS';
     mom_Fig_path = 'E:\Dropbox\Ben Serota\momentary\Figs';
+    avlnch_rslts = 'E:\Dropbox\Ben Serota\eeg ANALYSES\results\avalanches';
     
 elseif ismac
     in_root = '/Users/admin/Desktop/DACOBO_h/origin/';
@@ -21,6 +22,8 @@ elseif ismac
         data_paths{i} = sprintf('%s%s',in_root,conds{i});
         out_paths{i} = sprintf('%s%s',out_root,conds{i});
     end
+        WS_path = '/Users/admin/Dropbox/Ben Serota/momentary';
+        avlnch_rslts = '/Users/admin/Dropbox/Ben Serota/eeg ANALYSES/results/avalanches';
 end
 
 data_paths = data_paths';
