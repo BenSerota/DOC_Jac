@@ -1,6 +1,6 @@
 
 conds = {'VS';'MCS';'EMCS';'CTR'};
-subconds =  {'LSGS';'LSGD';'LDGS';'LDGD'}; %{'LDGD';'LSGD';'LSGS';'LDGS'}; %{'LDGD';'LDGS';'LSGD';'LSGS';};% original: {'LSGS';'LSGD';'LDGS';'LDGD'};
+subconds =  {'LSGS';'LSGD';'LDGS';'LDGD'};
 Fucked_up_stuff = {};
 c = 0;
 
