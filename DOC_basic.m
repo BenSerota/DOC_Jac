@@ -11,10 +11,10 @@ if ispc
         data_paths{i} = sprintf('%s%s',in_root,conds{i});
         out_paths{i} = sprintf('%s%s',out_root,conds{i});
     end
-    WS_path = 'C:\Users\BenSerota\Dropbox\Ben Serota\momentary\WS';
-    mom_Fig_path = 'C:\Users\BenSerota\Dropbox\Ben Serota\momentary\Figs';
-    LZ_rslts = 'C:\Users\BenSerota\Dropbox\Ben Serota\eeg ANALYSES\results\LZC';
-    avlnch_rslts = 'C:\Users\BenSerota\Dropbox\Ben Serota\eeg ANALYSES\results\avalanches';
+    WS_path = 'D:\Dropbox\Ben Serota\momentary\WS';
+    mom_Fig_path = 'D:\Dropbox\Ben Serota\momentary\Figs';
+    LZ_rslts = 'D:\Dropbox\Ben Serota\eeg ANALYSES\results\LZC';
+    avlnch_rslts = 'D:\Dropbox\Ben Serota\eeg ANALYSES\results\avalanches';
     
 elseif ismac
     in_root = '/Users/admin/Desktop/DACOBO_h/origin/';
@@ -30,4 +30,4 @@ end
 
 data_paths = data_paths';
 out_paths = out_paths';
-LZC_nohb_outpath = 'E:\Dropbox\Ben Serota\eeg ANALYSES\LZ\BenLZ\Zhang no HB\results';
+LZC_nohb_outpath = 'D:\Dropbox\Ben Serota\eeg ANALYSES\LZ\BenLZ\Zhang no HB\results';
